@@ -17,7 +17,7 @@ class Request(object):
         return super().__setattr__(name, value)
 
 
-def handle_aws_http_event(event, context):
+def aws_http_event_to_request(event, context):
     request = Request()
     request.method = event["httpMethod"].upper()
     request.headers = event["headers"]
@@ -42,7 +42,7 @@ def handle_aws_http_event(event, context):
 
 
 def handler(provider=None):
-    assert isinstance(provider, (str, type(None))), "Expected vendor to be string"
+    assert isinstance(provider, (str, type(None))), "Expected provider to be string"
     
     def inner(method_func):
         @functools.wraps(method_func)
@@ -56,13 +56,11 @@ def handler(provider=None):
             
             if provider == "AWS":
                 event, context = args
-                request = handle_aws_http_event(event, context)
+                request = aws_http_event_to_request(event, context)
                 return method_func(request)
 
-            raise NotImplementedError("Functions Provider Not Supported")
+            raise NotImplementedError("FaaS provider not supported")
 
         return _handle
 
     return inner
-
-fn = handler
