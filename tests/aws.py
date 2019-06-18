@@ -27,9 +27,7 @@ DEFAULT_HEADER = {
     "X-Forwarded-Proto": "https",
 }
 DEFAULT_METHOD = "POST"
-DEFAULT_BODY = (
-    "ewoJInF1ZXJ5IjoieyBhbGxBY2NvdW50cyB7ZWRnZXN7IG5vZGUgeyBlbWFpbCB9IH0gfSB9Igp9"
-)
+DEFAULT_BODY = '{"name":"stockist"}'
 DEFAULT_PARAMS = {}
 DEFAULT_QUERYSTRING = {}
 
@@ -47,7 +45,7 @@ def event(
         "path": "/stockist/",
         "headers": headers,
         "httpMethod": method.upper(),
-        "isBase64Encoded": kwargs.get("isBase64Encoded", True),
+        "isBase64Encoded": kwargs.get("isBase64Encoded", False),
         "body": body if not isinstance(body, dict) else json.dumps(body),
         "pathParameters": pathParams,
         "queryStringParameters": queryStrings,
