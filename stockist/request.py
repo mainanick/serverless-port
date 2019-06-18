@@ -43,7 +43,7 @@ def aws_http_event_to_request(event, context):
 
 def handler(provider=None):
     assert isinstance(provider, (str, type(None))), "Expected provider to be string"
-    
+
     def inner(method_func):
         @functools.wraps(method_func)
         def _handle(*args, **kwargs):
@@ -53,7 +53,7 @@ def handler(provider=None):
                 provider = os.getenv("STOCKIST_PROVIDER", "AWS")
 
             provider = provider.upper()
-            
+
             if provider == "AWS":
                 event, context = args
                 request = aws_http_event_to_request(event, context)
