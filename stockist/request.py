@@ -10,7 +10,7 @@ class Request(object):
         self.headers = None
         self.body = None
         self.path_params = None
-        self.query_params = None
+        self.args = None
         self.content_type = None
         self.content_params = None
         self.user = None
@@ -39,7 +39,7 @@ def aws_http_event_to_request(event, context):
         else:
             body = json.loads(body)
     request.body = body
-    request.query_params = event["queryStringParameters"]
+    request.args = event["queryStringParameters"]
     return request
 
 
@@ -60,6 +60,10 @@ def handler(provider=None):
                 event, context = args
                 request = aws_http_event_to_request(event, context)
                 return method_func(request)
+            
+            if provider == "GCP":
+                # GCP uses flask
+                return method_func(*args, **kwargs)
 
             raise NotImplementedError("FaaS provider not supported")
 
